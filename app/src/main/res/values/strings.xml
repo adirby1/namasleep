@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">NamaSleep</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="error_intro">Error intro</string>
+    <string name="error_blank_username">Blank user name</string>
+    <string name="error_join">error join</string>>
+    <string name="error_blank_password">Error blank pass</string>
+    <string name="error_end">Error end</string>
+    <string name="progress_login">Progress Login</string>
+    <string name="progress_log">Progress Login</string>
+
+
+
+</resources>
