@@ -9,6 +9,7 @@ import android.location.Geocoder;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +28,7 @@ import com.parse.FindCallback;
 import com.parse.Parse;
 
 import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -48,17 +50,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         alert=new AlertDialog.Builder(this);
-
-        load();
     }
 
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        load();
 
         // Add a marker in india and move the camera
 
 
-        LatLng hodu = new LatLng(28.641107,  77.212676);
+        LatLng hodu = new LatLng(30.641107,  77.212676);
         mMap.addMarker(new MarkerOptions().position(hodu).title("Marker in hodu"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(hodu));
         // marker listener
@@ -73,7 +74,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 ParseQuery<ParseObject> query = ParseQuery.getQuery("GuestHouse");
                 try {
                     List<ParseObject> info;
-                    query.whereEqualTo("LatLtn", marker.getPosition());
+                    query.whereEqualTo("LatLtn", new ParseGeoPoint(marker.getPosition().latitude, marker.getPosition().longitude));
                     info = query.find();
                     for (final ParseObject itemRow : info) {
                         alert.setTitle("Guest House" + itemRow.getString("name"));
@@ -87,8 +88,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 startActivity(intent);
 
                             }
-                        })
-                                .setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+                        }).setNegativeButton("Exit", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -128,14 +128,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             List<ParseObject> items;
             items=query.find();
             for(ParseObject itemRow:items){
-                LatLng latLng = new LatLng(Double.valueOf(itemRow.getString("Lat")),Double.valueOf(itemRow.getString("Ltn")));
+                //28.641107,  77.212676
+                //LatLng latLng = new LatLng(30.641107,77.212676);
+
+                //LatLng latLng = new LatLng(Double.valueOf(itemRow.getString("Lat")),Double.valueOf(itemRow.getString("Ltn")));
+                LatLng latLng = new LatLng(itemRow.getParseGeoPoint("LatLtn").getLatitude(), itemRow.getParseGeoPoint("LatLtn").getLongitude());
                 mMap.addMarker(new MarkerOptions().position(latLng));
             }
         }
         catch(Exception e){
+            Log.e("Error!", e.getMessage());
             e.printStackTrace();
         }
-
     }
 
     public void onSearch(View view) {

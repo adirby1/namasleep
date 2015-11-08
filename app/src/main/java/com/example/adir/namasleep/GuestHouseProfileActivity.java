@@ -21,6 +21,7 @@ public class GuestHouseProfileActivity extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_guest_house_profile);
         Intent intent=getIntent();
         GuestHouseName=intent.getStringExtra("name");
         name=(TextView)findViewById(R.id.name);
